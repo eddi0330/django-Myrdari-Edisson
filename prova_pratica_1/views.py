@@ -1,4 +1,34 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+
+
+def listaMaterie(request):
+    materie={
+        'm1':"Matematica",
+        'm2':"Italiano",
+        'm3':"Inglese",
+        'm4':"Storia",
+        'm5':"Geografia"
+    }
+    data = {"materie": list(materie.values("pk", "name"))}
+    response= JsonResponse(data)
+    return response
+
+def materie_detail(request, pk):
+    try: 
+        materia=listaMaterie.objects.get(pk=pk)
+        data={"materia": {
+            "name": materia.name
+        }}
+        response=JsonResponse(data)
+    except listaMaterie.doesNotExist:
+        response = JsonResponse({
+            "error": {
+                "code": 404,
+                "message": "prodotto non trovato"
+            }},
+            status=404)
+    return response
 
 def view_b(request):
     materie={
